@@ -57,8 +57,8 @@ EditorView::GutterView::GutterView(KDText::FontSize fontSize) :
 }
 
 void EditorView::GutterView::drawRect(KDContext * ctx, KDRect rect) const {
-  KDColor textColor = KDColor::RGB24(0x919EA4);
-  KDColor backgroundColor = KDColor::RGB24(0xE4E6E7);
+  KDColor textColor = KDColorBlack;
+  KDColor backgroundColor = KDColor::RGB24(0x65997A);
 
   ctx->fillRect(rect, backgroundColor);
 

@@ -9,18 +9,18 @@ extern "C" {
 
 namespace Code {
 
-constexpr KDColor CommentColor = KDColor::RGB24(0x999988);
-constexpr KDColor NumberColor =  KDColor::RGB24(0x009999);
-constexpr KDColor KeywordColor = KDColor::RGB24(0xFF000C);
+constexpr KDColor CommentColor = KDColor::RGB24(0x426A52); //0x65997A
+constexpr KDColor NumberColor =  KDColor::RGB24(0x1E2E24);
+constexpr KDColor KeywordColor = KDColor::RGB24(0x1E2E24);
 // constexpr KDColor BuiltinColor = KDColor::RGB24(0x0086B3);
-constexpr KDColor OperatorColor = KDColor::RGB24(0xd73a49);
-constexpr KDColor StringColor = KDColor::RGB24(0x032f62);
-constexpr KDColor BackgroundColor = KDColorWhite;
+constexpr KDColor OperatorColor = KDColor::RGB24(0x1E2E24);
+constexpr KDColor StringColor = KDColor::RGB24(0x1E2E24);
+constexpr KDColor BackgroundColor = KDColor::RGB24(0x88B098);
 
 static inline int min(int x, int y) { return (x<y ? x : y); }
 
 static inline KDColor TokenColor(mp_token_kind_t tokenKind) {
-  if (tokenKind == MP_TOKEN_STRING) {
+  /*if (tokenKind == MP_TOKEN_STRING) {
     return StringColor;
   }
   if (tokenKind == MP_TOKEN_INTEGER || tokenKind == MP_TOKEN_FLOAT_OR_IMAG) {
@@ -34,8 +34,8 @@ static inline KDColor TokenColor(mp_token_kind_t tokenKind) {
   }
   if (tokenKind >= MP_TOKEN_DEL_EQUAL && tokenKind <= MP_TOKEN_DEL_MINUS_MORE) {
     return OperatorColor;
-  }
-  return KDColorBlack;
+  }*/
+  return KDColor::RGB24(0x1E2E24);
 }
 
 static inline size_t TokenLength(mp_lexer_t * lex) {
