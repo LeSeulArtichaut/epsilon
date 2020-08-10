@@ -23,6 +23,7 @@ MainController::MainController(Responder * parentResponder, InputEventHandlerDel
   m_preferencesController(this),
   m_displayModeController(this, inputEventHandlerDelegate),
   m_languageController(this, Metric::CommonTopMargin),
+  m_foolsCell(I18n::Message::Default, KDFont::LargeFont),
   m_examModeController(this),
   m_aboutController(this)
 {
@@ -69,6 +70,13 @@ bool MainController::handleEvent(Ion::Events::Event event) {
         return true;
       }
       return false;
+    }
+    if (model()->childAtIndex(selectedRow())->label() == I18n::Message::Fish) {
+      if (event == Ion::Events::OK || event == Ion::Events::EXE || event == Ion::Events::Right) {
+        globalPreferences->setFools(!globalPreferences->hasFools());
+        m_selectableTableView.reloadCellAtLocation(m_selectableTableView.selectedColumn(), m_selectableTableView.selectedRow());
+        return true;
+      }
     }
   }
   if (event == Ion::Events::OK || event == Ion::Events::EXE || event == Ion::Events::Right) {
@@ -134,17 +142,21 @@ HighlightCell * MainController::reusableCell(int index, int type) {
 }
 
 int MainController::reusableCellCount(int type) {
-  if (type == 0) {
-    return k_numberOfSimpleChevronCells;
+  switch (type) {
+    case 0:
+      return k_numberOfSimpleChevronCells;
+    case 2:
+      return 2;
+    default:
+      return 1;
   }
-  return 1;
 }
 
 int MainController::typeAtLocation(int i, int j) {
   if (j == k_indexOfBrightnessCell) {
     return 1;
   }
-  if (hasPrompt() && j == k_indexOfPopUpCell) {
+  if (j == k_indexOfFoolsCell || (hasPrompt() && j == k_indexOfPopUpCell)) {
     return 2;
   }
   return 0;
@@ -172,6 +184,12 @@ void MainController::willDisplayCellForIndex(HighlightCell * cell, int index) {
     MessageTableCellWithSwitch * mySwitchCell = (MessageTableCellWithSwitch *)cell;
     SwitchView * mySwitch = (SwitchView *)mySwitchCell->accessoryView();
     mySwitch->setState(globalPreferences->showPopUp());
+    return;
+  }
+  if (index == k_indexOfFoolsCell) {
+    MessageTableCellWithSwitch * mySwitchCell = (MessageTableCellWithSwitch *)cell;
+    SwitchView * mySwitch = (SwitchView *)mySwitchCell->accessoryView();
+    mySwitch->setState(globalPreferences->hasFools());
     return;
   }
   MessageTableCellWithChevronAndMessage * myTextCell = (MessageTableCellWithChevronAndMessage *)cell;

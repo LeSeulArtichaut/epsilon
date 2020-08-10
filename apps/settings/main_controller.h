@@ -45,7 +45,8 @@ private:
   constexpr static int k_indexOfBrightnessCell = k_indexOfComplexFormatCell + 1;
   constexpr static int k_indexOfFontCell = k_indexOfBrightnessCell + 1;
   constexpr static int k_indexOfLanguageCell = k_indexOfFontCell + 1;
-  constexpr static int k_indexOfExamModeCell = k_indexOfLanguageCell + 1;
+  constexpr static int k_indexOfFoolsCell = k_indexOfLanguageCell + 1;
+  constexpr static int k_indexOfExamModeCell = k_indexOfFoolsCell + 1;
   /* Pop-up cell and About cell are located at the same index because pop-up
    * cell is optional. We must always correct k_indexOfAboutCell with
    * hasPrompt() (TODO: make hasPrompt() constexpr and correct
@@ -64,6 +65,7 @@ private:
   PreferencesController m_preferencesController;
   DisplayModeController m_displayModeController;
   LanguageController m_languageController;
+  MessageTableCellWithSwitch m_foolsCell;
   ExamModeController m_examModeController;
   AboutController m_aboutController;
 
