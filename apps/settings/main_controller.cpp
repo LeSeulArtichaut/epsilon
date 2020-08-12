@@ -74,6 +74,7 @@ bool MainController::handleEvent(Ion::Events::Event event) {
     if (model()->childAtIndex(selectedRow())->label() == I18n::Message::Fish) {
       if (event == Ion::Events::OK || event == Ion::Events::EXE || event == Ion::Events::Right) {
         globalPreferences->setFools(!globalPreferences->hasFools());
+        Preferences::sharedPreferences()->setFools(globalPreferences->hasFools());
         m_selectableTableView.reloadCellAtLocation(m_selectableTableView.selectedColumn(), m_selectableTableView.selectedRow());
         return true;
       }

@@ -48,12 +48,15 @@ public:
   void setComplexFormat(Preferences::ComplexFormat complexFormat) { m_complexFormat = complexFormat; }
   uint8_t numberOfSignificantDigits() const { return m_numberOfSignificantDigits; }
   void setNumberOfSignificantDigits(uint8_t numberOfSignificantDigits) { m_numberOfSignificantDigits = numberOfSignificantDigits; }
+  bool hasFools() const { return m_fools; }
+  void setFools(bool fools) { m_fools = fools; }
 private:
   AngleUnit m_angleUnit;
   PrintFloatMode m_displayMode;
   EditionMode m_editionMode;
   ComplexFormat m_complexFormat;
   uint8_t m_numberOfSignificantDigits;
+  bool m_fools;
 };
 
 }

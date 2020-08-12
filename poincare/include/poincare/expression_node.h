@@ -150,7 +150,8 @@ public:
       m_angleUnit(angleUnit),
       m_target(target),
       m_symbolicComputation(symbolicComputation),
-      m_unitConversion(unitConversion)
+      m_unitConversion(unitConversion),
+      m_fools(Preferences::sharedPreferences()->hasFools())
     {}
     Context * context() { return m_context; }
     Preferences::ComplexFormat complexFormat() const { return m_complexFormat; }
@@ -158,6 +159,7 @@ public:
     ReductionTarget target() const { return m_target; }
     SymbolicComputation symbolicComputation() const { return m_symbolicComputation; }
     UnitConversion unitConversion() const { return m_unitConversion; }
+    bool hasFools() const { return m_fools; }
   private:
     Context * m_context;
     Preferences::ComplexFormat m_complexFormat;
@@ -165,6 +167,7 @@ public:
     ReductionTarget m_target;
     SymbolicComputation m_symbolicComputation;
     UnitConversion m_unitConversion;
+    bool m_fools;
   };
 
   virtual Sign sign(Context * context) const { return Sign::Unknown; }
