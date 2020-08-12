@@ -77,6 +77,12 @@ Expression Division::shallowReduce(ExpressionNode::ReductionContext reductionCon
       return e;
     }
   }
+  // x/0 = 42 :)
+  if (childAtIndex(1).isRationalZero() && reductionContext.hasFools()) {
+    Expression result = Rational::Builder(42);
+    replaceWithInPlace(result);
+    return result;
+  }
   /* For matrices: we decided that A/B is computed as A = A/B * B so A/B = AB^-1
    * (it could have been A = B * A/B so A/B = B^-1*A). */
   Expression p = Power::Builder(childAtIndex(1), Rational::Builder(-1));
