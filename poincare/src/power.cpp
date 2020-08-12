@@ -532,7 +532,13 @@ Expression Power::shallowReduce(ExpressionNode::ReductionContext reductionContex
         return result;
       } else if (indexSign == ExpressionNode::Sign::Negative) {
         // 0^x with x < 0 = undef
-        return replaceWithUndefinedInPlace();
+        if (reductionContext.hasFools()) {
+          Expression result = Rational::Builder(42);
+          replaceWithInPlace(result);
+          return result;
+        } else {
+          return replaceWithUndefinedInPlace();
+        }
       }
     }
     // 1^x = 1 if x != ±inf
