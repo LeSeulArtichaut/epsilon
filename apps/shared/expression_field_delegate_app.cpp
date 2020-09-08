@@ -2,6 +2,8 @@
 #include <escher.h>
 #include <apps/i18n.h>
 #include <poincare/expression.h>
+#include <poincare/multiplication.h>
+#include <poincare/based_integer.h>
 
 using namespace Poincare;
 
@@ -44,6 +46,23 @@ bool ExpressionFieldDelegateApp::layoutFieldDidReceiveEvent(LayoutField * layout
       // Unparsable expression
       displayWarning(I18n::Message::SyntaxError);
       return true;
+    }
+    if (Poincare::Preferences::sharedPreferences()->hasFools() && e.type() == Poincare::ExpressionNode::Type::Multiplication) {
+      using namespace Poincare;
+
+      Multiplication m = static_cast<Multiplication &>(e);
+      if (m.numberOfChildren() == 2) {
+        Expression e1 = m.childAtIndex(0);
+        Expression e2 = m.childAtIndex(1);
+        if (e1.type() == ExpressionNode::Type::BasedInteger && e2.type() == ExpressionNode::Type::BasedInteger) {
+          BasedInteger i1 = static_cast<BasedInteger &>(e1);
+          BasedInteger i2 = static_cast<BasedInteger &>(e2);
+          if (i1.integer().isLowerThan(11) && i2.integer().isLowerThan(11)) {
+            displayWarning(I18n::Message::LearnYourTables);
+            return true;
+          }
+        }
+      }
     }
     /* Step 3: Expression serialization. Tesulting texts are parseable and
      * displayable, like:
