@@ -243,6 +243,22 @@ Expression Addition::shallowReduce(ExpressionNode::ReductionContext reductionCon
   while (i < numberOfChildren()-1) {
     Expression e1 = childAtIndex(i);
     Expression e2 = childAtIndex(i+1);
+    if (reductionContext.hasFools() && e1.type() == ExpressionNode::Type::Rational && e2.type() == ExpressionNode::Type::Rational) {
+      Rational r1 = static_cast<const Rational &>(e1);
+      Rational r2 = static_cast<const Rational &>(e2);
+      if (r1.isOne() && r2.isOne()) {
+        // 1+1 = 3 :)
+        replaceChildAtIndexInPlace(i, Rational::Builder(3));
+        removeChildAtIndexInPlace(i+1);
+        continue;
+      }
+      if (r1.isTwo() && r2.isTwo()) {
+        // 2+2 = 5 :)
+        replaceChildAtIndexInPlace(i, Rational::Builder(5));
+        removeChildAtIndexInPlace(i + 1);
+        continue;
+      }
+    }
     if (e1.isNumber() && e2.isNumber()) {
       Number r1 = static_cast<Number&>(e1);
       Number r2 = static_cast<Number&>(e2);
