@@ -2,7 +2,6 @@
 #include <escher.h>
 #include <apps/i18n.h>
 #include <poincare/expression.h>
-#include <poincare/multiplication.h>
 #include <poincare/based_integer.h>
 
 using namespace Poincare;
@@ -47,21 +46,24 @@ bool ExpressionFieldDelegateApp::layoutFieldDidReceiveEvent(LayoutField * layout
       displayWarning(I18n::Message::SyntaxError);
       return true;
     }
-    if (Poincare::Preferences::sharedPreferences()->hasFools() && e.type() == Poincare::ExpressionNode::Type::Multiplication) {
+    if (Poincare::Preferences::sharedPreferences()->hasFools()) { // :)
       using namespace Poincare;
 
-      Multiplication m = static_cast<Multiplication &>(e);
-      if (m.numberOfChildren() == 2) {
-        Expression e1 = m.childAtIndex(0);
-        Expression e2 = m.childAtIndex(1);
-        if (e1.type() == ExpressionNode::Type::BasedInteger && e2.type() == ExpressionNode::Type::BasedInteger) {
-          BasedInteger i1 = static_cast<BasedInteger &>(e1);
-          BasedInteger i2 = static_cast<BasedInteger &>(e2);
-          if (i1.integer().isLowerThan(11) && i2.integer().isLowerThan(11)) {
+      switch (e.type()) {
+        case ExpressionNode::Type::Multiplication:
+          if (shouldLearnTables(static_cast<Multiplication &>(e))) {
             displayWarning(I18n::Message::LearnYourTables);
             return true;
           }
-        }
+          break;
+        case ExpressionNode::Type::Addition:
+          if (playsChildrenGames(static_cast<Addition &>(e))) {
+            displayWarning(I18n::Message::ChildGame);
+            return true;
+          }
+          break;
+        default:
+          break;
       }
     }
     /* Step 3: Expression serialization. Tesulting texts are parseable and
@@ -81,6 +83,40 @@ bool ExpressionFieldDelegateApp::layoutFieldDidReceiveEvent(LayoutField * layout
   }
   if (fieldDidReceiveEvent(layoutField, layoutField, event)) {
     return true;
+  }
+  return false;
+}
+
+bool shouldLearnTables(Poincare::Multiplication m) {
+  using namespace Poincare;
+  if (m.numberOfChildren() == 2) {
+    Expression e1 = m.childAtIndex(0);
+    Expression e2 = m.childAtIndex(1);
+    if (e1.type() == ExpressionNode::Type::BasedInteger && e2.type() == ExpressionNode::Type::BasedInteger) {
+      BasedInteger i1 = static_cast<BasedInteger &>(e1);
+      BasedInteger i2 = static_cast<BasedInteger &>(e2);
+      if (i1.integer().isLowerThan(11) && i2.integer().isLowerThan(11)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool playsChildrenGames(Poincare::Addition a) {
+  using namespace Poincare;
+  if (a.numberOfChildren() == 3) {
+    Expression e1 = a.childAtIndex(0);
+    Expression e2 = a.childAtIndex(1);
+    Expression e3 = a.childAtIndex(2);
+    if (e1.type() == ExpressionNode::Type::BasedInteger && e2.type() == ExpressionNode::Type::BasedInteger && e3.type() == ExpressionNode::Type::BasedInteger) {
+      Integer i1 = static_cast<BasedInteger &>(e1).integer();
+      Integer i2 = static_cast<BasedInteger &>(e2).integer();
+      Integer i3 = static_cast<BasedInteger &>(e3).integer();
+      if (i1.isOne() && i2.isTwo() && i3.isThree()) {
+        return true;
+      }
+    }
   }
   return false;
 }

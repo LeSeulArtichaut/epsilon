@@ -3,6 +3,8 @@
 
 #include "text_field_delegate_app.h"
 #include <escher/layout_field_delegate.h>
+#include <poincare/multiplication.h>
+#include <poincare/addition.h>
 
 namespace Shared {
 
@@ -14,6 +16,9 @@ public:
 protected:
   ExpressionFieldDelegateApp(Snapshot * snapshot, ViewController * rootViewController);
 };
+
+bool shouldLearnTables(Poincare::Multiplication m);
+bool playsChildrenGames(Poincare::Addition a);
 
 }
 
