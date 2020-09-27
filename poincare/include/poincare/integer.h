@@ -119,6 +119,7 @@ public:
   bool isOne() const { return (numberOfDigits() == 1 && digit(0) == 1 && !m_negative); };
   bool isTwo() const { return (numberOfDigits() == 1 && digit(0) == 2 && !m_negative); };
   bool isThree() const { return (numberOfDigits() == 1 && digit(0) == 3 && !m_negative); };
+  bool isEight() const { return (numberOfDigits() == 1 && digit(0) == 8 && !m_negative); };
   bool isTen() const { return (numberOfDigits() == 1 && digit(0) == 10 && !m_negative); };
   bool isMinusOne() const { return (numberOfDigits() == 1 && digit(0) == 1 && m_negative); };
   bool isMinusTwo() const { return (numberOfDigits() == 1 && digit(0) == 2 && m_negative); };

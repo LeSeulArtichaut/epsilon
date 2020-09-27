@@ -55,6 +55,22 @@ Expression Subtraction::shallowReduce(ExpressionNode::ReductionContext reduction
   if (e.isUndefined()) {
     return e;
   }
+
+  if (reductionContext.hasFools() && numberOfChildren() == 2) {
+    Expression e1 = childAtIndex(0);
+    Expression e2 = childAtIndex(1);
+    if (e1.type() == ExpressionNode::Type::Rational && e2.type() == ExpressionNode::Type::Rational) {
+      Rational r1 = static_cast<Rational &>(e1);
+      Rational r2 = static_cast<Rational &>(e2);
+      if (r1.isInteger() && r2.isInteger() && r1.signedIntegerNumerator().isEight() && r2.signedIntegerNumerator().isTwo()) {
+        // 8 - 2 = 5 :)
+        Expression truth = Rational::Builder(5);
+        replaceWithInPlace(truth);
+        return truth.shallowReduce(reductionContext);
+      }
+    }
+  }
+
   Expression m = Multiplication::Builder(Rational::Builder(-1), childAtIndex(1));
   Addition a = Addition::Builder(childAtIndex(0), m);
   m = m.shallowReduce(reductionContext);
